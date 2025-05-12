@@ -529,19 +529,6 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
-# Example Configuration
-#
-
-#
-# I2C Master
-#
-CONFIG_I2C_MASTER_SCL=4
-CONFIG_I2C_MASTER_SDA=5
-CONFIG_I2C_MASTER_FREQUENCY=400000
-# end of I2C Master
-# end of Example Configuration
-
-#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_DEBUG=y

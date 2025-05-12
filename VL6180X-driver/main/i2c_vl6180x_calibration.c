@@ -1,17 +1,7 @@
-#include <string.h>
-#include <stdio.h>
-#include "sdkconfig.h"
-#include "esp_log.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "driver/i2c_master.h"
-
-#include <vl6180x_api.h>
+#include "vl6180x_lib.h"
 
 #define I2C_SCL 15
 #define I2C_SDA 16
-
-i2c_t vl6180x_i2c;
 
 #define N_MEASURE_AVG   10
 
@@ -80,8 +70,7 @@ int Sample_OffsetRunCalibration(VL6180xDev_t myDev)
     return offset;
 }
 
-uint8_t Sample_OffsetCalibrate(void) {
-    VL6180xDev_t myDev = vl6180x_i2c;
+uint8_t Sample_OffsetCalibrate(VL6180xDev_t myDev) {
     VL6180x_RangeData_t Range;
     int offset;
     int status;
@@ -119,7 +108,13 @@ uint8_t Sample_OffsetCalibrate(void) {
 
 void app_main(void)
 {
-    i2c_init(&vl6180x_i2c, I2C_NUM_1, I2C_SCL, I2C_SDA, 400000, 0x29);
+    // Initialize the VL6180x sensor
+    VL6180x_t vl6180x_dev;
+    vl6180x_dev.addr = VL6180X_I2C_ADDR; // Default I2C address
+    vl6180x_dev.irq = 0; // No IRQ pin used
+
+    // Initialize the I2C driver
+    VL6180x_Init(&vl6180x_dev, I2C_NUM_1, I2C_SCL, I2C_SDA);
     
-    Sample_OffsetCalibrate();
+    Sample_OffsetCalibrate(vl6180x_dev.i2c_handle);
 }
